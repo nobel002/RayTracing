@@ -14,7 +14,7 @@ class Particle(Object):
         oldLine = Line(0,0,0,2048)
         for line in range(fov):
            closes = math.inf
-           oldLine = Line()
+           
            for item in enviroment:
                Line(0, 0, 0, 2048).rotateLine()
         return lineOfSight
