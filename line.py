@@ -6,10 +6,14 @@ class Line(object):
         self.offset = offset
         self.beginX = beginX
         self.endX = endX
+        self.points = [[None, None], [None, None]]
         self.pygameMode = True  # this is set to true cause i use this here in a pygame enviroment sow
         if self.rico != None and self.offset != None:
-            self.beginPoints = [(self.beginX, self.beginX * self.rico + self.offset),
-                                (self.endX, self.endX * self.rico + self.offset)]
+            self.points = [[self.beginX, self.beginX * self.rico + self.offset],
+                                [self.endX, self.endX * self.rico + self.offset]]
+
+        self.points[0][1] = -self.points[0][1] if self.pygameMode and self.points[0] != [None, None] else self.points[0][1]
+        self.points[1][1] = -self.points[1][1] if self.pygameMode and self.points[1] != [None, None] else self.points[1][1]
 
     def calcIntersect(self, other):
         xIntersect = (other.offset - self.offset) / (self.rico - other.rico)
@@ -44,14 +48,14 @@ class Line(object):
         
     def rotateLine(self, angle=pi / 6, origin=(0, 0)):
         #fist subtract the origin vector from the point vectors
-        p1 = [self.beginPoints[0][0] - origin[0], self.beginPoints[0][1] - origin[1]]
-        p2 = [self.beginPoints[1][0] - origin[0], self.beginPoints[1][1] - origin[1]]
+        p1 = [self.points[0][0] - origin[0], self.points[0][1] - origin[1]]
+        p2 = [self.points[1][0] - origin[0], self.points[1][1] - origin[1]]
         #rotate set points
-        xAccentPOne = self.beginPoints[0][0] * cos(angle) - self.beginPoints[0][1] * sin(angle)
-        yAccentPOne = self.beginPoints[0][1] * cos(angle) + self.beginPoints[0][0] * sin(angle)
+        xAccentPOne = self.points[0][0] * cos(angle) - self.points[0][1] * sin(angle)
+        yAccentPOne = self.points[0][1] * cos(angle) + self.points[0][0] * sin(angle)
 
-        xAccentPTwo = self.beginPoints[1][0] * cos(angle) - self.beginPoints[1][1] * sin(angle)
-        yAccentPTwo = self.beginPoints[1][1] * cos(angle) + self.beginPoints[1][0] * sin(angle)
+        xAccentPTwo = self.points[1][0] * cos(angle) - self.points[1][1] * sin(angle)
+        yAccentPTwo = self.points[1][1] * cos(angle) + self.points[1][0] * sin(angle)
 
         #add the origin vector to the newly rotated points this has to happen in this order to prevent distortion
         p1 = [xAccentPOne + origin[0], yAccentPOne + origin[1]]
